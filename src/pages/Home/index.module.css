@@ -1,0 +1,12 @@
+.todoList {
+    padding: 3em 5em;
+}
+
+.newTodo {
+    margin-bottom: 2em;
+}
+
+.newTodo h1 {
+    font-size: 3rem;
+    margin-bottom: 1em;
+}
