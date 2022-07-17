@@ -5,13 +5,17 @@ import classes from "./index.module.css";
 import ListItem from "./ListItem";
 
 import useForm from "hooks/use-form";
-import { fetchPage, add_task } from "store/redux/actions/task";
+import {
+  fetchPage,
+  add_task,
+  delete_task,
+  edit_task,
+} from "store/redux/actions/task";
 import { useDispatch, useSelector } from "react-redux";
 
 const Home = () => {
   const dispatch = useDispatch();
   const task = useSelector((state) => state.task);
-  console.log(task.changed);
 
   useEffect(() => {
     dispatch(
@@ -32,7 +36,22 @@ const Home = () => {
     reset: todoReset,
   } = useForm((value) => value.trim() !== "");
 
-  const removeDataById = (id) => {};
+  const removeTaskById = (id) => {
+    dispatch(
+      delete_task(
+        `https://react-testing-3d213-default-rtdb.asia-southeast1.firebasedatabase.app/tasks/${id}.json`
+      )
+    );
+  };
+
+  const editTaskById = (id, newTask) => {
+    dispatch(
+      edit_task(
+        `https://react-testing-3d213-default-rtdb.asia-southeast1.firebasedatabase.app/tasks/${id}.json`,
+        newTask
+      )
+    );
+  };
 
   const submitHandler = (event) => {
     event.preventDefault();
@@ -45,16 +64,30 @@ const Home = () => {
     todoReset();
   };
 
-  if (task.listdata.length < 1) {
-    return;
-  }
-
   const loadedTask = [];
 
   for (const key in task.listdata) {
     loadedTask.push({
       id: key,
       name: task.listdata[key].text,
+    });
+  }
+
+  let listTask = null;
+
+  if (task.listdata) {
+    listTask = loadedTask.map((item) => {
+      return (
+        <div>
+          <ListItem
+            key={item.id}
+            id={item.id}
+            name={item.name}
+            removeItem={removeTaskById}
+            editItem={editTaskById}
+          />
+        </div>
+      );
     });
   }
 
@@ -73,18 +106,7 @@ const Home = () => {
           <Button>Add</Button>
         </form>
       </div>
-      <div>
-        {loadedTask.map((item) => {
-          return (
-            <ListItem
-              key={item.id}
-              id={item.id}
-              name={item.name}
-              removeItem={removeDataById}
-            />
-          );
-        })}
-      </div>
+      {listTask}
     </section>
   );
 };

@@ -1,4 +1,4 @@
-import { FETCH_PAGE, ADD_TASK } from "../types";
+import { FETCH_PAGE, ADD_TASK, DELETE_TASK, EDIT_TASK } from "../types";
 
 export const fetchPage = (url) => {
   return async (dispatch) => {
@@ -19,7 +19,7 @@ export const fetchPage = (url) => {
         payload: { listdata: result },
       });
     } catch (error) {
-      console.log(error);
+      throw new Error(error.message);
     }
   };
 };
@@ -39,7 +39,6 @@ export const add_task = (url, newTask) => {
       }
 
       const data = await response.json();
-      console.log(data);
 
       return data;
     };
@@ -48,7 +47,60 @@ export const add_task = (url, newTask) => {
       await sendRequest();
       dispatch({ type: ADD_TASK, payload: { changed: (state) => !state } });
     } catch (error) {
-      console.log(error);
+      throw new Error(error.message);
     }
   };
+};
+
+export const delete_task = (url) => async (dispatch) => {
+  const deleteTask = async () => {
+    const response = await fetch(url, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Something went wrong!");
+    }
+
+    const data = response.json();
+
+    return data;
+  };
+  try {
+    await deleteTask();
+    dispatch({ type: DELETE_TASK, payload: { changed: (state) => !state } });
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
+
+export const edit_task = (url, newTask) => async (dispatch) => {
+  const editTask = async () => {
+    const response = await fetch(url, {
+      method: "PUT",
+      body: JSON.stringify({ text: newTask }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    if (!response.ok) {
+      throw new Error("Something went wrong");
+    }
+
+    const data = response.data;
+    return data;
+  };
+
+  try {
+    await editTask();
+    dispatch({
+      type: EDIT_TASK,
+      payload: { changed: (state) => !state },
+    });
+  } catch (error) {
+    throw new Error(error.message);
+  }
 };

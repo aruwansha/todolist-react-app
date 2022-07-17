@@ -1,13 +1,41 @@
-.ul{
+.ul {
     position: relative;
 }
 
 .ul li {
     display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
     background: #79DAE8;
     padding: 15px 20px;
     color: #fff;
     margin: 5px 0;
     transition: .5;
+}
+
+.iconWrapper {
+    display: flex;
+    flex-direction: row;
+}
+
+.iconEdit {
+    background-color: #5FD068;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 5px;
+    margin: auto 5px;
+    cursor: pointer;
+}
+
+.iconDelete {
+    background-color: #EB5353;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 5px;
     cursor: pointer;
 }

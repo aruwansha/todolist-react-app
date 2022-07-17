@@ -1,4 +1,4 @@
-import { FETCH_PAGE, ADD_TASK } from "../types";
+import { FETCH_PAGE, ADD_TASK, DELETE_TASK, EDIT_TASK } from "../types";
 
 const initialState = { changed: false, listdata: {} };
 const task = (state = initialState, action) => {
@@ -13,7 +13,16 @@ const task = (state = initialState, action) => {
         ...state,
         ...action.payload,
       };
-
+    case DELETE_TASK:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case EDIT_TASK:
+      return {
+        ...state,
+        ...action.payload,
+      };
     default:
       return state;
   }
